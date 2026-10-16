@@ -1,0 +1,27 @@
+{
+  "event_id": 3,
+  "hot_seats": 5,
+  "status_codes": {
+    "200": 4408,
+    "201": 2092,
+    "202": 91,
+    "402": 86,
+    "409": 782
+  },
+  "outcomes": {
+    "hot:cancelled": 1504,
+    "hot:lost_race_409": 693,
+    "hot:won_201": 1505,
+    "life:CONFIRMED": 423,
+    "life:abandoned": 73,
+    "life:callback_CONFIRMED": 82,
+    "life:callback_PAYMENT_FAILED": 9,
+    "life:cancelled_with_refund": 37,
+    "life:confirm_402_PAYMENT_FAILED": 86,
+    "life:held": 587,
+    "life:seat_taken_between_browse_and_hold_409": 89,
+    "life:sold_out": 889
+  },
+  "server_errors_sample": [],
+  "server_error_count": 0
+}

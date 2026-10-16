@@ -1,0 +1,105 @@
+﻿.\.venv\Scripts\locust.exe : [2026-10-17 01:43:14,327] Pratham_Laptop/INFO/locust.main: Starting Locust 2.32.5
+At line:1 char:441
++ ... ENT_ID="3"; .\.venv\Scripts\locust.exe -f locust/locustfile.py --head ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([2026-10-17 01:...g Locust 2.32.5:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[2026-10-17 01:43:14,328] Pratham_Laptop/INFO/locust.main: Run time limit set to 30 seconds
+[2026-10-17 01:43:14,329] Pratham_Laptop/INFO/locust.runners: Ramping to 80 users at a rate of 20.00 per second
+[2026-10-17 01:43:17,348] Pratham_Laptop/INFO/locust.runners: All users spawned: {"ConcertLifecycleUser": 64, 
+"HotspotContentionUser": 16} (80 total users)
+[2026-10-17 01:43:43,960] Pratham_Laptop/INFO/locust.main: --run-time limit reached, shutting down
+[2026-10-17 01:43:44,265] Pratham_Laptop/INFO/locust.main: Shutting down (exit code 0)
+Type     Name                                                                          # reqs      # fails |    Avg    
+ Min     Max    Med |   req/s  failures/s
+--------|----------------------------------------------------------------------------|-------|-------------|-------|---
+----|-------|-------|--------|-----------
+GET      GET /customers/{ref}/bookings                                                    274     0(0.00%) |     25    
+   5     193     14 |    9.16        0.00
+GET      GET /events/{id}/seats?available_only                                           1565     0(0.00%) |     21    
+   3     215     10 |   52.31        0.00
+GET      GET /reservations/{id}                                                           514     0(0.00%) |     34    
+   3     134     30 |   17.18        0.00
+POST     POST /payments/{id}/simulate-callback                                             91     0(0.00%) |     57    
+  11     181     47 |    3.04        0.00
+POST     POST /reservations                                                               676     0(0.00%) |     60    
+   9     226     54 |   22.59        0.00
+POST     POST /reservations [hotspot]                                                    2198     0(0.00%) |     34    
+   8     305     19 |   73.47        0.00
+POST     POST /reservations/{id}/cancel                                                    37     0(0.00%) |     60    
+  11     197     44 |    1.24        0.00
+POST     POST /reservations/{id}/cancel [hotspot]                                        1504     0(0.00%) |     29    
+   9     299     17 |   50.27        0.00
+POST     POST /reservations/{id}/confirm [DELAYED]                                         91     0(0.00%) |     54    
+  11     183     40 |    3.04        0.00
+POST     POST /reservations/{id}/confirm [FAILURE]                                         86     0(0.00%) |     73    
+  10     194     74 |    2.87        0.00
+POST     POST /reservations/{id}/confirm [SUCCESS]                                        423     0(0.00%) |     71    
+  10     252     69 |   14.14        0.00
+--------|----------------------------------------------------------------------------|-------|-------------|-------|---
+----|-------|-------|--------|-----------
+         Aggregated                                                                      7459     0(0.00%) |     35    
+   3     305     19 |  249.31        0.00
+
+Response time percentiles (approximated)
+Type     Name                                                                                  50%    66%    75%    
+80%    90%    95%    98%    99%  99.9% 99.99%   100% # reqs
+--------|--------------------------------------------------------------------------------|--------|------|------|------
+|------|------|------|------|------|------|------|------
+GET      GET /customers/{ref}/bookings                                                          14     21     34     
+45     62     76    100    110    190    190    190    274
+GET      GET /events/{id}/seats?available_only                                                  10     16     24     
+33     56     70     95    140    210    220    220   1565
+GET      GET /reservations/{id}                                                                 30     47     55     
+60     72     83     94    100    130    130    130    514
+POST     POST /payments/{id}/simulate-callback                                                  47     70     91     
+98    120    140    180    180    180    180    180     91
+POST     POST /reservations                                                                     55     76     86     
+94    120    140    190    210    230    230    230    676
+POST     POST /reservations [hotspot]                                                           19     27     38     
+48     88    120    140    170    290    310    310   2198
+POST     POST /reservations/{id}/cancel                                                         44     77     89     
+95    130    190    200    200    200    200    200     37
+POST     POST /reservations/{id}/cancel [hotspot]                                               17     22     28     
+34     73     99    120    140    290    300    300   1504
+POST     POST /reservations/{id}/confirm [DELAYED]                                              40     69     86     
+96    110    130    180    180    180    180    180     91
+POST     POST /reservations/{id}/confirm [FAILURE]                                              76     93    110    
+110    130    140    190    190    190    190    190     86
+POST     POST /reservations/{id}/confirm [SUCCESS]                                              69     93    100    
+110    140    150    180    190    250    250    250    423
+--------|--------------------------------------------------------------------------------|--------|------|------|------
+|------|------|------|------|------|------|------|------
+         Aggregated                                                                             19     31     48     
+60     90    110    140    170    250    310    310   7459
+
+
+=== The Last Seat: outcome counters ===
+{
+  "event_id": 3,
+  "hot_seats": 5,
+  "status_codes": {
+    "200": 4408,
+    "201": 2092,
+    "202": 91,
+    "402": 86,
+    "409": 782
+  },
+  "outcomes": {
+    "hot:cancelled": 1504,
+    "hot:lost_race_409": 693,
+    "hot:won_201": 1505,
+    "life:CONFIRMED": 423,
+    "life:abandoned": 73,
+    "life:callback_CONFIRMED": 82,
+    "life:callback_PAYMENT_FAILED": 9,
+    "life:cancelled_with_refund": 37,
+    "life:confirm_402_PAYMENT_FAILED": 86,
+    "life:held": 587,
+    "life:seat_taken_between_browse_and_hold_409": 89,
+    "life:sold_out": 889
+  },
+  "server_errors_sample": [],
+  "server_error_count": 0
+}

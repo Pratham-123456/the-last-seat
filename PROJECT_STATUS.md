@@ -1,6 +1,6 @@
 # Project Status
 
-**Current milestone:** All phases A–H complete except Docker runtime verification.
+**Current milestone:** All phases A–H complete and verified (CI runs once pushed).
 **Last updated:** 2026-10-17
 
 ## Phases
@@ -13,8 +13,8 @@
 | D. Payments, cancellations, idempotency | ✅ Done | integration + concurrency tests passing |
 | E. Routes, errors, expiry worker | ✅ Done | all 13 endpoints; worker verified in tests and live |
 | F. Locust + invariants | ✅ Done | 26,524 req, 447 RPS, 0 failures, invariants all 0 |
-| G. Docker & Compose | ⚠️ Written, config validated, **not run** | `docker compose config` OK; Docker Desktop engine never started (WSL `docker-desktop` Stopped) |
-| H. Docs, lint, git readiness | ✅ Done (git repo initialised; first commit left to the owner) | Ruff clean; 73/73 tests |
+| G. Docker & Compose | ✅ Done | build + migrate + api + worker verified; demo, Locust (7,459 req, 0 failures) and invariants inside containers; worker healthcheck bug fixed |
+| H. Docs, lint, git readiness | ✅ Done | Ruff clean; 73/73 tests; committed on `main` (not pushed) |
 
 ## Latest successful test run
 
@@ -31,9 +31,8 @@ No other database or role on the server was created, modified or read.
 
 ## Blockers / open items
 
-1. **Docker runtime not verified.** Next action: open Docker Desktop, resolve whatever dialog or error prevents the engine from starting, then run `docker compose up --build -d` and `irm http://127.0.0.1:8000/health/ready`.
-2. **CI workflow not executed.** It runs once the repo is pushed to GitHub.
-3. **Initial git commit** not made yet: the repository is initialised and `.env` is confirmed ignored.
+1. **CI workflow not executed.** It runs once the repo is pushed to GitHub.
+2. The Compose stack was left **running** (default 300 s TTL). Stop it with `docker compose down`; its volume keeps the container data.
 
 ## Next actions
 

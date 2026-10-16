@@ -70,7 +70,31 @@ payment PENDING; waiting 21s for the hold to expire...
 late callback -> 409 LATE_PAYMENT_VOIDED | payment: VOIDED | reservation: EXPIRED
 ```
 
+## Docker Compose (Workflow B)
+
+Run on 2026-10-17 with Docker Desktop 29.7.2, alongside the local PostgreSQL on 5432, which was not affected.
+
+```powershell
+docker compose up --build -d
+```
+
+| Check | Result |
+|---|---|
+| Image build (python:3.12-slim, non-root) | ✓ built; `docker compose exec api id` → `uid=10001(appuser)` |
+| `db` (postgres:18-alpine, host port 5433, volume `the-last-seat_last_seat_pgdata`) | ✓ healthy |
+| `migrate` | ✓ waited for DB, ran `0001_initial_schema`, seeded `{"event_id": 1, "seats_inserted": 500}`, exited 0 |
+| `api` | ✓ healthy; `/health/ready` → `{"status":"ok","database":"last_seat_db"}` |
+| `worker` | ✓ running; log shows `expired 18 hold(s)`, `expired 4 hold(s)`, … |
+| Demo (`scripts/demo.py --event-id 2 --seat 10 --late`, TTL 20 s) | ✓ stampede `{201: 1, 409: 99}`; FAILURE → retry CONFIRMED; DELAYED → callback CONFIRMED; cancel → refund → reallocated; idempotent replay; late callback → `409 LATE_PAYMENT_VOIDED` |
+| Locust, event 3, `-u 80 -r 20 -t 30s` | ✓ **7,459 requests, 249 RPS, p50 19 ms, p95 110 ms, p99 170 ms, 0 failures, 0 × 5xx** (raw: `reports/raw/docker_run_*`) |
+| Invariants in container DB (`docker compose exec api python -m app.cli invariants`) | ✓ all 9 checks = 0 violations |
+| Graceful stop (`docker compose stop worker`) | ✓ `received signal 15, finishing current cycle` → `expiry worker stopped` |
+| Local `last_seat_db` afterwards | ✓ unchanged (still events 1, 2, 3) |
+
+The containerised latency is higher than in Workflow A. Requests cross the Docker Desktop/WSL 2 network layer and the API runs 2 workers instead of 4. Both figures come from one laptop and aren't directly comparable.
+
+Bug found and fixed during this run: the `worker` and `migrate` services inherited the image's HTTP `HEALTHCHECK`, which targets the API on port 8000, so the worker would have been reported as unhealthy. Both now set `healthcheck: disable: true` in `compose.yaml`.
+
 ## Not verified
 
-* **Docker Compose stack (Workflow B):** `docker compose config` validates the file, but the Docker Desktop engine never started on this machine during the session (WSL distro `docker-desktop` stayed `Stopped`), so the image build and containers were **not run**.
 * **GitHub Actions workflow** (`.github/workflows/tests.yml`): written but not executed (repository not pushed).

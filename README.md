@@ -196,7 +196,7 @@ docker compose down                   # stop; data stays in volume last_seat_pgd
 * If your local API already uses port 8000: `$env:API_HOST_PORT = "8001"`.
 * `docker compose down -v` **deletes** the container database volume. Use it only when you really want a fresh container DB.
 
-> **Verification status:** `docker compose config` validates the file, but the Docker engine never started during development on this machine, so the image build and container run are **not verified yet**. See [PROJECT_STATUS.md](PROJECT_STATUS.md).
+> **Verified 2026-10-17** (Docker Desktop 29.7.2): build ✓, `migrate` applied the schema and seeded 500 seats and exited 0 ✓, `api` healthy and running as non-root `appuser` ✓, worker expiring holds ✓, full `scripts/demo.py --late` against the containers ✓, a 30 s / 80-user Locust run gave 7,459 requests at 249 RPS with 0 failures and all invariants 0 ✓, graceful `SIGTERM` stop ✓. Your local PostgreSQL was untouched. Details: [TEST_REPORT.md](TEST_REPORT.md#docker-compose-workflow-b).
 
 ## Testing
 
