@@ -97,4 +97,4 @@ Bug found and fixed during this run: the `worker` and `migrate` services inherit
 
 ## GitHub Actions (CI)
 
-First run on push of `186ea82` to [Pratham-123456/the-last-seat](https://github.com/Pratham-123456/the-last-seat) ([run 38971493040](https://github.com/Pratham-123456/the-last-seat/actions/runs/38971493040)): **success**. Ubuntu runner with a `postgres:18-alpine` service container; `pip install -r requirements-dev.txt`, `ruff check .`, `ruff format --check .` and `pytest -q` all passed.
+First run, on the initial push to [Pratham-123456/the-last-seat](https://github.com/Pratham-123456/the-last-seat) ([run 38971493040](https://github.com/Pratham-123456/the-last-seat/actions/runs/38971493040)): **success**. Ubuntu runner with a `postgres:18-alpine` service container; `pip install -r requirements-dev.txt`, `ruff check .`, `ruff format --check .` and `pytest -q` all passed.
