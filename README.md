@@ -1,4 +1,4 @@
-# The Last Seat 🎟️
+# The Last Seat 
 
 **Concurrency-safe ticket booking backend.** CodeChef-VIT Promotional Cycle 2026–27, Backend Development task.
 
