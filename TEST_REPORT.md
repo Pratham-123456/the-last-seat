@@ -95,6 +95,6 @@ The containerised latency is higher than in Workflow A. Requests cross the Docke
 
 Bug found and fixed during this run: the `worker` and `migrate` services inherited the image's HTTP `HEALTHCHECK`, which targets the API on port 8000, so the worker would have been reported as unhealthy. Both now set `healthcheck: disable: true` in `compose.yaml`.
 
-## Not verified
+## GitHub Actions (CI)
 
-* **GitHub Actions workflow** (`.github/workflows/tests.yml`): written but not executed (repository not pushed).
+First run on push of `186ea82` to [Pratham-123456/the-last-seat](https://github.com/Pratham-123456/the-last-seat) ([run 38971493040](https://github.com/Pratham-123456/the-last-seat/actions/runs/38971493040)): **success**. Ubuntu runner with a `postgres:18-alpine` service container; `pip install -r requirements-dev.txt`, `ruff check .`, `ruff format --check .` and `pytest -q` all passed.

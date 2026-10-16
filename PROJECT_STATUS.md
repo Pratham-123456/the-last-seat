@@ -1,6 +1,6 @@
 # Project Status
 
-**Current milestone:** All phases A–H complete and verified (CI runs once pushed).
+**Current milestone:** All phases A–H complete and verified, including CI on GitHub.
 **Last updated:** 2026-10-17
 
 ## Phases
@@ -14,7 +14,7 @@
 | E. Routes, errors, expiry worker | ✅ Done | all 13 endpoints; worker verified in tests and live |
 | F. Locust + invariants | ✅ Done | 26,524 req, 447 RPS, 0 failures, invariants all 0 |
 | G. Docker & Compose | ✅ Done | build + migrate + api + worker verified; demo, Locust (7,459 req, 0 failures) and invariants inside containers; worker healthcheck bug fixed |
-| H. Docs, lint, git readiness | ✅ Done | Ruff clean; 73/73 tests; committed on `main` (not pushed) |
+| H. Docs, lint, git readiness | ✅ Done | Ruff clean; 73/73 tests; pushed to github.com/Pratham-123456/the-last-seat; CI run passed |
 
 ## Latest successful test run
 
@@ -31,8 +31,7 @@ No other database or role on the server was created, modified or read.
 
 ## Blockers / open items
 
-1. **CI workflow not executed.** It runs once the repo is pushed to GitHub.
-2. The Compose stack was left **running** (default 300 s TTL). Stop it with `docker compose down`; its volume keeps the container data.
+1. The Compose stack was left **running** (default 300 s TTL). Stop it with `docker compose down`; its volume keeps the container data.
 
 ## Next actions
 
