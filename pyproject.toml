@@ -1,0 +1,26 @@
+[project]
+name = "the-last-seat"
+version = "1.0.0"
+description = "Concurrency-safe ticket booking backend (CodeChef-VIT 2026-27 Backend task)"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"
+markers = [
+    "concurrency: multi-threaded race tests against real PostgreSQL",
+]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["migrations/script.py.mako"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["B008"]  # FastAPI's Depends()/Query() in defaults is idiomatic
+
+[tool.ruff.lint.per-file-ignores]
+"migrations/env.py" = ["E402", "I001"]

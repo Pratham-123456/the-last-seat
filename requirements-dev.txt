@@ -1,0 +1,6 @@
+# Development, testing and load-testing tools (local venv / CI only)
+-r requirements.txt
+httpx==0.28.1
+pytest==8.3.4
+locust==2.32.5
+ruff==0.8.4

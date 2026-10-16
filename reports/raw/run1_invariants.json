@@ -1,0 +1,26 @@
+﻿{
+  "violations": {
+    "1_single_active_reservation_per_seat": 0,
+    "2_capacity_bound": 0,
+    "3_confirmed_has_exactly_one_succeeded_charge": 0,
+    "4_no_confirmation_at_or_after_expiry": 0,
+    "6_succeeded_charge_only_on_confirmed_or_cancelled": 0,
+    "6b_cancelled_after_charge_has_refund": 0,
+    "7_no_charge_succeeded_after_expiry": 0,
+    "9_no_pending_payment_on_inactive_reservation": 0,
+    "9b_terminal_payment_has_completed_at": 0
+  },
+  "counts": {
+    "reservations": {
+      "CANCELLED": 7055,
+      "CONFIRMED": 495,
+      "EXPIRED": 62
+    },
+    "payments": {
+      "CHARGE:FAILED": 111,
+      "CHARGE:SUCCEEDED": 543,
+      "REFUND:SUCCEEDED": 48
+    },
+    "idempotency_records": 18455
+  }
+}

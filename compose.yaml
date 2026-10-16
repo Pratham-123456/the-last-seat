@@ -1,0 +1,74 @@
+# Workflow B: a fully isolated, reproducible stack.
+#
+# It NEVER touches your local PostgreSQL: the container database has its own named
+# volume and is published on host port 5433 (your local server keeps 5432).
+#
+#   docker compose up --build -d      # start everything
+#   docker compose logs -f api worker
+#   docker compose down               # stop (data kept in the volume)
+#
+# The DB password below is a throwaway for this local container only.
+# Override it with:  $env:POSTGRES_PASSWORD = "something-else"
+name: the-last-seat
+
+x-app-env: &app-env
+  DATABASE_URL: postgresql+psycopg://last_seat_app:${POSTGRES_PASSWORD:-last_seat_container_pw}@db:5432/last_seat_db
+  HOLD_TTL_SECONDS: ${HOLD_TTL_SECONDS:-300}
+  EXPIRY_WORKER_INTERVAL_SECONDS: ${EXPIRY_WORKER_INTERVAL_SECONDS:-5}
+  DB_POOL_SIZE: "10"
+  DB_MAX_OVERFLOW: "10"
+  API_THREAD_LIMIT: "20"
+
+services:
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: last_seat_app
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-last_seat_container_pw}
+      POSTGRES_DB: last_seat_db
+    ports:
+      - "${DB_HOST_PORT:-5433}:5432"
+    volumes:
+      - last_seat_pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U last_seat_app -d last_seat_db"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  migrate:
+    build: .
+    image: the-last-seat:latest
+    environment: *app-env
+    command: >
+      sh -c "python scripts/wait_for_database.py --timeout 60 &&
+             alembic upgrade head &&
+             python -m app.cli seed"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+  api:
+    image: the-last-seat:latest
+    environment: *app-env
+    ports:
+      - "${API_HOST_PORT:-8000}:8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  worker:
+    image: the-last-seat:latest
+    environment: *app-env
+    command: ["python", "-m", "app.cli", "worker"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    stop_signal: SIGTERM
+    stop_grace_period: 15s
+
+volumes:
+  last_seat_pgdata:

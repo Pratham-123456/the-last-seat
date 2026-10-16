@@ -1,0 +1,82 @@
+﻿PASSED
+tests/concurrency/test_races.py::test_10_concurrent_success_confirmations_charge_once PASSED
+tests/concurrency/test_races.py::test_10_concurrent_mixed_scenarios_at_most_one_success PASSED
+tests/concurrency/test_races.py::test_10_concurrent_callbacks_for_one_delayed_payment PASSED
+tests/concurrency/test_races.py::test_confirm_vs_cancel_race_leaves_consistent_state PASSED
+expiry race status codes: {201: 40, 409: 80}
+PASSED
+boundary outcomes: {'RESERVATION_EXPIRED': 30, 'HELD': 30}
+PASSED
+stampede status codes: {409: 99, 201: 1}
+PASSED
+multi-seat status codes: {409: 180, 201: 20}
+PASSED
+ERROR [last_seat.api] unhandled error
+  File "C:\Users\insan\OneDrive\Desktop\CodeChef Project\.venv\Lib\site-packages\starlette\middleware\errors.py", line 165, in __call__
+    raise RuntimeError("simulated crash between payment insert and confirmation")
+RuntimeError: simulated crash between payment insert and confirmation
+tests/integration/test_atomicity_restart_schema.py::test_crash_mid_confirmation_rolls_back_everything PASSED
+tests/integration/test_atomicity_restart_schema.py::test_restart_loses_no_state PASSED
+tests/integration/test_atomicity_restart_schema.py::test_migration_created_constraints_and_indexes PASSED
+tests/integration/test_atomicity_restart_schema.py::test_partial_unique_index_is_the_last_line_of_defence PASSED
+tests/integration/test_atomicity_restart_schema.py::test_check_constraints_reject_invalid_states PASSED
+tests/integration/test_atomicity_restart_schema.py::test_seed_is_idempotent PASSED
+tests/integration/test_cancellation.py::test_cancel_held_frees_seat_for_immediate_reallocation PASSED
+tests/integration/test_cancellation.py::test_cancel_confirmed_records_refund_and_reallocates PASSED
+tests/integration/test_cancellation.py::test_cancel_is_idempotent_and_cancelled_is_terminal PASSED
+tests/integration/test_cancellation.py::test_cancel_expired_hold_returns_409 PASSED
+tests/integration/test_cancellation.py::test_cancel_with_pending_payment_voids_it_and_late_callback_is_rejected PASSED
+tests/integration/test_expiry_worker.py::test_worker_expires_only_past_due_holds PASSED
+tests/integration/test_expiry_worker.py::test_worker_respects_batch_size PASSED
+tests/integration/test_expiry_worker.py::test_worker_skips_seat_locked_by_an_api_transaction PASSED
+tests/integration/test_history_and_health.py::test_booking_history_lists_every_status_newest_first PASSED
+tests/integration/test_history_and_health.py::test_reservation_status_endpoint PASSED
+tests/integration/test_history_and_health.py::test_health_endpoints_and_openapi PASSED
+tests/integration/test_idempotency.py::test_replay_returns_identical_response_without_new_rows PASSED
+tests/integration/test_idempotency.py::test_same_key_different_payload_is_rejected PASSED
+tests/integration/test_idempotency.py::test_without_key_a_retry_is_a_new_request PASSED
+tests/integration/test_idempotency.py::test_payment_replay_never_creates_second_attempt PASSED
+tests/integration/test_idempotency.py::test_same_key_is_scoped_per_endpoint PASSED
+tests/integration/test_idempotency.py::test_key_reused_for_different_reservation_is_mismatch PASSED
+tests/integration/test_idempotency.py::test_invalid_idempotency_key_rejected PASSED
+tests/integration/test_payments.py::test_happy_path_view_hold_confirm_history PASSED
+tests/integration/test_payments.py::test_failed_payment_is_recorded_hold_kept_and_retry_succeeds PASSED
+tests/integration/test_payments.py::test_delayed_payment_then_successful_callback PASSED
+tests/integration/test_payments.py::test_delayed_payment_failed_callback_keeps_hold_and_allows_retry PASSED
+tests/integration/test_payments.py::test_late_callback_after_expiry_is_voided_and_never_confirms PASSED
+tests/integration/test_payments.py::test_late_callback_after_seat_reallocated_cannot_double_book PASSED
+tests/integration/test_payments.py::test_confirm_after_expiry_returns_409_and_frees_seat PASSED
+tests/integration/test_payments.py::test_real_short_ttl_expiry PASSED
+tests/integration/test_payments.py::test_confirm_twice_never_double_charges PASSED
+tests/integration/test_payments.py::test_unknown_ids_return_404 PASSED
+tests/integration/test_reservations.py::test_hold_creates_held_reservation_with_server_side_expiry PASSED
+tests/integration/test_reservations.py::test_second_student_gets_409_for_held_seat PASSED
+tests/integration/test_reservations.py::test_unknown_seat_and_event_return_404 PASSED
+tests/integration/test_reservations.py::test_validation_errors_use_envelope PASSED
+tests/integration/test_reservations.py::test_lazy_expiry_lets_new_student_take_stale_seat_without_worker PASSED
+tests/integration/test_reservations.py::test_seat_listing_and_event_summary PASSED
+tests/unit/test_units.py::test_reservation_payload_valid_and_stripped PASSED
+tests/unit/test_units.py::test_reservation_payload_rejected[payload0] PASSED
+tests/unit/test_units.py::test_reservation_payload_rejected[payload1] PASSED
+tests/unit/test_units.py::test_reservation_payload_rejected[payload2] PASSED
+tests/unit/test_units.py::test_reservation_payload_rejected[payload3] PASSED
+tests/unit/test_units.py::test_reservation_payload_rejected[payload4] PASSED
+tests/unit/test_units.py::test_reservation_payload_rejected[payload5] PASSED
+tests/unit/test_units.py::test_reservation_payload_rejected[payload6] PASSED
+tests/unit/test_units.py::test_payment_scenarios PASSED
+tests/unit/test_units.py::test_canonical_json_ignores_key_order_and_whitespace PASSED
+tests/unit/test_units.py::test_fingerprint_is_sha256_and_sensitive_to_every_part PASSED
+tests/unit/test_units.py::test_effective_status[HELD-10-HELD] PASSED
+tests/unit/test_units.py::test_effective_status[HELD-0-EXPIRED] PASSED
+tests/unit/test_units.py::test_effective_status[HELD--1-EXPIRED] PASSED
+tests/unit/test_units.py::test_effective_status[CONFIRMED--100-CONFIRMED] PASSED
+tests/unit/test_units.py::test_effective_status[CANCELLED-10-CANCELLED] PASSED
+tests/unit/test_units.py::test_effective_status[EXPIRED-10-EXPIRED] PASSED
+tests/unit/test_units.py::test_domain_errors_map_to_http_and_envelope PASSED
+tests/unit/test_units.py::test_guard_allows_project_databases[last_seat_db] PASSED
+tests/unit/test_units.py::test_guard_allows_project_databases[last_seat_test_db] PASSED
+tests/unit/test_units.py::test_guard_refuses_any_other_database[postgres] PASSED
+tests/unit/test_units.py::test_guard_refuses_any_other_database[university_dbms] PASSED
+tests/unit/test_units.py::test_guard_refuses_any_other_database[last_seat_db_old] PASSED
+tests/unit/test_units.py::test_guard_refuses_any_other_database[] PASSED
+======================== 73 passed in 65.31s (0:01:05) ========================
