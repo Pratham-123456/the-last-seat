@@ -2,11 +2,13 @@
 
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 import anyio.to_thread
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from psycopg import errors as pg_errors
 from sqlalchemy.exc import DBAPIError, IntegrityError
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -17,6 +19,8 @@ from app.core.exceptions import DomainError, error_body
 from app.db.session import dispose_engine, get_engine
 
 log = logging.getLogger("last_seat.api")
+
+STATIC_DIR = Path(__file__).resolve().parent / "static"
 
 # Transient contention errors: the client should simply retry (ideally with its Idempotency-Key).
 RETRYABLE_DB_ERRORS = (
@@ -109,6 +113,14 @@ def create_app() -> FastAPI:
 
     for module in (health, events, reservations, payments, bookings):
         app.include_router(module.router)
+
+    # Browser frontend: plain HTML/CSS/JS calling the JSON API above on the same origin.
+    app.mount("/app", StaticFiles(directory=STATIC_DIR, html=True), name="frontend")
+
+    @app.get("/", include_in_schema=False)
+    def root():
+        return RedirectResponse("/app/")
+
     return app
 
 

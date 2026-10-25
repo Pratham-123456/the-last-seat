@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Last Seat</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <h1>The Last Seat</h1>
+      <span class="tagline">Concurrency-safe ticket booking</span>
+    </div>
+    <div class="controls">
+      <label>Event
+        <select id="event-select" aria-label="Event"></select>
+      </label>
+      <label>You are
+        <input id="me" maxlength="128" spellcheck="false" autocomplete="off" aria-label="Your student id">
+      </label>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="card seatmap-card" aria-labelledby="seatmap-title">
+      <div class="card-head">
+        <h2 id="seatmap-title">Seats</h2>
+        <div class="summary" id="summary" aria-live="polite"></div>
+      </div>
+      <div class="legend">
+        <span><i class="dot available"></i>Available</span>
+        <span><i class="dot held"></i>Held</span>
+        <span><i class="dot confirmed"></i>Booked</span>
+        <span><i class="dot mine"></i>Yours</span>
+      </div>
+      <div class="stage">STAGE</div>
+      <div id="seat-grid" class="seat-grid" role="grid" aria-label="Seat map"></div>
+      <p class="hover-readout" id="hover-readout">Click an available seat to hold it.</p>
+    </section>
+
+    <aside class="side">
+      <section class="card" aria-labelledby="res-title">
+        <h2 id="res-title">Your reservation</h2>
+        <div id="reservation" class="reservation empty">No seat selected yet.</div>
+      </section>
+
+      <section class="card" aria-labelledby="bookings-title">
+        <h2 id="bookings-title">Your bookings</h2>
+        <ul id="bookings" class="bookings"></ul>
+      </section>
+
+      <section class="card" aria-labelledby="stampede-title">
+        <h2 id="stampede-title">Stampede demo</h2>
+        <p class="muted">Fire many reservation requests for one seat from different students at once. Exactly one should win.</p>
+        <div class="row">
+          <label>Seat <input id="stampede-seat" type="number" min="1" value="1"></label>
+          <label>Students <input id="stampede-count" type="number" min="2" max="300" value="100"></label>
+          <button id="stampede-go" class="btn primary">Fire</button>
+        </div>
+        <div id="stampede-result" class="stampede-result" aria-live="polite"></div>
+        <p class="muted small">Browsers send about 6 requests per server at a time, so these arrive in quick waves. The automated test fires 100 truly at once from separate threads.</p>
+      </section>
+
+      <section class="card" aria-labelledby="log-title">
+        <div class="card-head">
+          <h2 id="log-title">Request log</h2>
+          <button id="replay" class="btn ghost" disabled title="Send the last action again with the same Idempotency-Key">Resend last (same key)</button>
+        </div>
+        <ol id="log" class="log"></ol>
+        <pre id="log-detail" class="log-detail" hidden></pre>
+      </section>
+    </aside>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -11,11 +11,12 @@ Stack: Python 3.12 · FastAPI · SQLAlchemy 2 (sync) · PostgreSQL 18 · psycopg
 ## Highlights (all measured, see [TEST_REPORT.md](TEST_REPORT.md))
 
 * **100 students, 1 seat, one instant:** exactly **1 × `201`**, **99 × `409`**, **0 × `5xx`**, and exactly 1 active row in PostgreSQL.
-* **73/73 tests pass** against real PostgreSQL: 24 unit, 40 integration, 9 multi-threaded concurrency.
+* **77/77 tests pass** against real PostgreSQL: 24 unit, 44 integration, 9 multi-threaded concurrency.
 * **Load test:** 150 users for 60 s on a laptop gave **26,524 requests, ~447 RPS, p50 9 ms, p95 30 ms, p99 74 ms, 0 failures**, and all database invariants held afterwards ([report](reports/load_test_report.md)).
 * Holds **expire automatically**: lazily under the seat lock, and proactively by a `SKIP LOCKED` worker.
 * Simulated payments **SUCCESS / FAILURE / DELAYED (+ webhook callback)**. A late callback after expiry is **voided** and never re-books a seat.
 * **Idempotency-Key** on every POST, stored in PostgreSQL, so double-clicks and retries are safe.
+* A **browser frontend** at `/app/` with a live seat map, payments, cancellation, a stampede button and a request log.
 
 ## How double booking is made impossible
 
@@ -220,6 +221,19 @@ $env:LOCUST_EVENT_ID = "2"
 
 Use a new `--event-id` for each run, so no cleanup is ever needed. Results: [reports/load_test_report.md](reports/load_test_report.md).
 
+## Web frontend
+
+Open **http://127.0.0.1:8000/** (it redirects to `/app/`) once the API is running, in either workflow. It is plain HTML, CSS and JavaScript in `app/static/`, served by FastAPI itself, so there is no build step and no CORS setup. It talks only to the JSON API above.
+
+* **Live seat map** of the chosen event, refreshed every 2 s: available, held by others, booked, and yours.
+* **Click a free seat to hold it**, then watch the server-side countdown and pay: success, card declined (402, hold kept), or bank is slow (202), followed by "bank says yes/no".
+* **Cancel** a hold or a paid booking (the refund appears in the payment list) and see the seat free up instantly.
+* **Your bookings** for the id in the "You are" box (stored only in your browser).
+* **Stampede demo:** fires up to 300 reservation requests for one seat from different students and shows the tally (`201 × 1, 409 × 99`).
+* **Request log:** every call with its status and error code; click a line to see the full JSON, and **Resend last (same key)** to watch an idempotent replay.
+
+Browsers send only about 6 requests to one server at a time, so the in-page stampede arrives in fast waves; `tests/concurrency/test_seat_stampede.py` is the truly simultaneous version.
+
 ## Live review demo
 
 ```powershell
@@ -244,7 +258,7 @@ The API is stateless, so you scale it by adding replicas; PostgreSQL enforces ev
 ## Repository map
 
 ```
-app/            FastAPI app: routes, schemas, services (transactions + locking), models, worker
+app/            FastAPI app: routes, schemas, services (transactions + locking), models, worker, static/ frontend
 migrations/     Alembic (hand-written initial migration with all constraints & partial indexes)
 scripts/        bootstrap_local_db.ps1/.sql, seed_demo_data.py, wait_for_database.py, demo.ps1/.py
 tests/          unit / integration / concurrency (real PostgreSQL, real HTTP, threads)
